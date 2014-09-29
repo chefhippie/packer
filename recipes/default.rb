@@ -31,6 +31,6 @@ bash "packer_install" do
   action :run
 
   not_if do
-    ::File.join(node["packer"]["install_prefix"], "packer").exists?
+    ::File.join(node["packer"]["install_path"], "packer").exists?
   end
 end

@@ -30,6 +30,10 @@ bash "packer_install" do
   cwd Chef::Config[:file_cache_path]
   action :run
 
+  only_if do
+    %x(/usr/local/bin/packer version).chomp("") !~ /#{node["packer"]["version"]}$/
+  end
+
   not_if do
     ::File.exists? ::File.join(node["packer"]["install_path"], "packer")
   end

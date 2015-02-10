@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: packer
-# Attributes:: default
+# Recipe:: source
 #
 # Copyright 2013-2014, Thomas Boerger <thomas@webhippie.de>
 #
@@ -17,10 +17,24 @@
 # limitations under the License.
 #
 
-default["packer"]["method"] = "package"
+remote_file ::File.join(Chef::Config[:file_cache_path], node["packer"]["source"]["package_file"]) do
+  source node["packer"]["source"]["package_url"]
+  action :create_if_missing
+end
 
-default["packer"]["zypper"]["enabled"] = true
-default["packer"]["zypper"]["alias"] = "hashicorp"
-default["packer"]["zypper"]["title"] = "Hashicorp Repository"
-default["packer"]["zypper"]["repo"] = "http://packman.inode.at/home:/tboerger:/hashicorp/openSUSE_#{node["platform_version"]}/"
-default["packer"]["zypper"]["key"] = "#{node["mpd"]["zypper"]["repo"]}repodata/repomd.xml.key"
+bash "packer_install" do
+  code <<-EOH
+    unzip #{node["packer"]["source"]["package_file"]} -d #{node["packer"]["source"]["install_path"]}
+  EOH
+
+  cwd Chef::Config[:file_cache_path]
+  action :run
+
+  only_if do
+    %x(/usr/local/bin/packer version).chomp("") !~ /#{node["packer"]["source"]["version"]}$/
+  end
+
+  not_if do
+    ::File.exists? ::File.join(node["packer"]["source"]["install_path"], "packer")
+  end
+end

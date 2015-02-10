@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: packer
-# Attributes:: default
+# Recipe:: package
 #
 # Copyright 2013-2014, Thomas Boerger <thomas@webhippie.de>
 #
@@ -17,10 +17,25 @@
 # limitations under the License.
 #
 
-default["packer"]["method"] = "package"
+case node["platform_family"]
+when "suse"
+  include_recipe "zypper"
 
-default["packer"]["zypper"]["enabled"] = true
-default["packer"]["zypper"]["alias"] = "hashicorp"
-default["packer"]["zypper"]["title"] = "Hashicorp Repository"
-default["packer"]["zypper"]["repo"] = "http://packman.inode.at/home:/tboerger:/hashicorp/openSUSE_#{node["platform_version"]}/"
-default["packer"]["zypper"]["key"] = "#{node["mpd"]["zypper"]["repo"]}repodata/repomd.xml.key"
+  zypper_repository node["packer"]["zypper"]["alias"] do
+    uri node["packer"]["zypper"]["repo"]
+    key node["packer"]["zypper"]["key"]
+    title node["packer"]["zypper"]["title"]
+
+    action :add
+
+    only_if do
+      node["packer"]["zypper"]["enabled"]
+    end
+  end
+end
+
+node["packer"]["package"]["packages"].each do |name|
+  package name do
+    action :install
+  end
+end

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: packer
-# Attributes:: default
+# Attributes:: source
 #
 # Copyright 2013-2014, Thomas Boerger <thomas@webhippie.de>
 #
@@ -17,10 +17,7 @@
 # limitations under the License.
 #
 
-default["packer"]["method"] = "package"
-
-default["packer"]["zypper"]["enabled"] = true
-default["packer"]["zypper"]["alias"] = "hashicorp"
-default["packer"]["zypper"]["title"] = "Hashicorp Repository"
-default["packer"]["zypper"]["repo"] = "http://packman.inode.at/home:/tboerger:/hashicorp/openSUSE_#{node["platform_version"]}/"
-default["packer"]["zypper"]["key"] = "#{node["mpd"]["zypper"]["repo"]}repodata/repomd.xml.key"
+default["packer"]["source"]["version"] = "0.7.5"
+default["packer"]["source"]["package_file"] = "packer_#{node["packer"]["version"]}_linux_amd64.zip"
+default["packer"]["source"]["package_url"] = "https://dl.bintray.com/mitchellh/packer/#{node["packer"]["package_file"]}"
+default["packer"]["source"]["install_path"] = "/usr/local/bin"

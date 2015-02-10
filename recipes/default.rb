@@ -17,24 +17,13 @@
 # limitations under the License.
 #
 
-remote_file ::File.join(Chef::Config[:file_cache_path], node["packer"]["package_file"]) do
-  source node["packer"]["package_url"]
-  action :create_if_missing
-end
-
-bash "packer_install" do
-  code <<-EOH
-    unzip #{node["packer"]["package_file"]} -d #{node["packer"]["install_path"]}
-  EOH
-
-  cwd Chef::Config[:file_cache_path]
-  action :run
-
-  only_if do
-    %x(/usr/local/bin/packer version).chomp("") !~ /#{node["packer"]["version"]}$/
-  end
-
-  not_if do
-    ::File.exists? ::File.join(node["packer"]["install_path"], "packer")
+case node["packer"]["method"]
+when "package"
+  include_recipe "packer::package"
+when "source"
+  include_recipe "packer::source"
+else
+  log "Unknown install method for packer" do
+    level :fatal
   end
 end

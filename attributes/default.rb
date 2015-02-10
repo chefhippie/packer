@@ -23,4 +23,4 @@ default["packer"]["zypper"]["enabled"] = true
 default["packer"]["zypper"]["alias"] = "hashicorp"
 default["packer"]["zypper"]["title"] = "Hashicorp Repository"
 default["packer"]["zypper"]["repo"] = "http://packman.inode.at/home:/tboerger:/hashicorp/openSUSE_#{node["platform_version"]}/"
-default["packer"]["zypper"]["key"] = "#{node["mpd"]["zypper"]["repo"]}repodata/repomd.xml.key"
+default["packer"]["zypper"]["key"] = "#{node["packer"]["zypper"]["repo"]}repodata/repomd.xml.key"

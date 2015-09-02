@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-default["packer"]["source"]["version"] = "0.7.5"
+default["packer"]["source"]["version"] = "0.8.6"
 default["packer"]["source"]["package_file"] = "packer_#{node["packer"]["source"]["version"]}_linux_amd64.zip"
 default["packer"]["source"]["package_url"] = "https://dl.bintray.com/mitchellh/packer/#{node["packer"]["source"]["package_file"]}"
 default["packer"]["source"]["install_path"] = "/usr/local/bin"

@@ -22,5 +22,5 @@ default["packer"]["method"] = "package"
 default["packer"]["zypper"]["enabled"] = true
 default["packer"]["zypper"]["alias"] = "hashicorp"
 default["packer"]["zypper"]["title"] = "Hashicorp Repository"
-default["packer"]["zypper"]["repo"] = "http://download.opensuse.org/repositories/home:/tboerger:/hashicorp/openSUSE_#{node["platform_version"]}/"
+default["packer"]["zypper"]["repo"] = "http://download.opensuse.org/repositories/home:/tboerger:/hashicorp/openSUSE_#{node["platform_version"].to_i.to_s == node["platform_version"] ? "Tumbleweed" : node["platform_version"]}/"
 default["packer"]["zypper"]["key"] = "#{node["packer"]["zypper"]["repo"]}repodata/repomd.xml.key"
